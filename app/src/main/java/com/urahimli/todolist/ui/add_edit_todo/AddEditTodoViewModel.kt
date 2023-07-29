@@ -22,7 +22,7 @@ class AddEditTodoViewModel @Inject constructor(
 ) : ViewModel() {
 
     var todo by mutableStateOf<Todo?>(null)
-        private set             // ancaq bu ekrandan deyise bilirik deyerini, ancaq basqa yerlerden deyeri goruruk
+        private set             
 
     var title by mutableStateOf("")
         private set
@@ -33,12 +33,10 @@ class AddEditTodoViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    //viewmodel initialize olan kimi calisir
     init {
-        val todoId = savedStateHandle.get<Int>("todoId")!!   // todoId = nav arg, o biri viewmodel'dan gonderdiyimiz
-        if (todoId != -1) {     // movcud todo'ya girmisen
+        val todoId = savedStateHandle.get<Int>("todoId")!!  
+        if (todoId != -1) {     
             viewModelScope.launch {
-                // todo null deyilse
                 repository.getTodoById(todoId)?.let { todo ->
                     title = todo.title
                     description = todo.description ?: ""
@@ -52,7 +50,7 @@ class AddEditTodoViewModel @Inject constructor(
     fun onEvent(event: AddEditTodoEvent) {
         when(event) {
             is AddEditTodoEvent.OnTitleChange -> {
-                title = event.title          //basda yazdigimiz mutablestate deyisir
+                title = event.title          
             }
             is AddEditTodoEvent.OnDescriptionChange -> {
                 description = event.description
@@ -63,17 +61,17 @@ class AddEditTodoViewModel @Inject constructor(
                         sendUiEvent(UiEvent.ShowSnackbar(
                             message = "The title can't be empty!"
                         ))
-                        return@launch          //yerde qalan hallarda viewmodel launch donur
+                        return@launch          
                     }
                     repository.insertTodo(
                         Todo(
-                            title = title,             //sagdaki deyerler yuxaridaki mutable state'lerdir
+                            title = title,             
                             description = description,
                             isDone = todo?.isDone ?: false,
                             id = todo?.id
                         )
                     )
-                    sendUiEvent(UiEvent.PopBackStack)    // todolist ekranina avtomatik qayidir
+                    sendUiEvent(UiEvent.PopBackStack)    
                 }
             }
         }
