@@ -35,7 +35,6 @@ fun AddEditTodoScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // uiEvent'deki eventleri burada collect edib aliriq kimi
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
