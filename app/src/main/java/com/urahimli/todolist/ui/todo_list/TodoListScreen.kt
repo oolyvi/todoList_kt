@@ -34,21 +34,19 @@ fun TodoListScreen(
     viewModel: TodoListViewModel = hiltViewModel()
 ) {
 
-    // state'leri aliriq
     val todos = viewModel.todos.collectAsState(initial = emptyList())
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // uiEvent'deki eventleri burada collect edib aliriq kimi
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.ShowSnackbar -> {
                     val result = snackbarHostState.showSnackbar(
                         message = event.message,
-                        actionLabel = event.action    //undo button
+                        actionLabel = event.action    
                     )
-                    if (result == SnackbarResult.ActionPerformed) {   //click undo button
+                    if (result == SnackbarResult.ActionPerformed) {   
                         viewModel.onEvent(TodoListEvent.OnUndoDeleteClick)
                     }
                 }
@@ -75,7 +73,7 @@ fun TodoListScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(todos.value) { todo ->       //todo her item'i gosterir
+            items(todos.value) { todo ->       
                 TodoItem(
                     todo = todo,
                     onEvent = viewModel::onEvent,
