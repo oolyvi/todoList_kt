@@ -15,6 +15,6 @@ Room database. Using technologies are:
 
 ## Screenshots samples from the app
 
-<img src="screenshots/ss111.png" width="350">
+<img src="assets/s1.png" width="350">
 <br>
-<img src="screenshots/ss222.png" width="350">l
+<img src="assets/s2.png" width="350">
