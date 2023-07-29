@@ -54,9 +54,7 @@ fun TodoItem(
                     )
                 }
             }
-            // description optional parameter idi
             todo.description?.let { description ->
-
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = description)
             }
@@ -69,5 +67,4 @@ fun TodoItem(
             }
         )
     }
-
 }
