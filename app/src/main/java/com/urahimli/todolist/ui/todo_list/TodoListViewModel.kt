@@ -17,31 +17,25 @@ class TodoListViewModel @Inject constructor(
     private val repository: TodoRepository
 ) : ViewModel() {
 
-    // todolistscreen'de state olaraq almaq ucun yazdiq burada
     val todos = repository.getTodos()
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    //recently deleted todo'nu bildirir, undo sohbetinde isimize yarayacaq
     private var deletedTodo: Todo? = null
 
-    // 1 event fun ile butun event sohbetini hell edirik
-    // bu function'i da screen'de istifade edirik
     fun onEvent(event: TodoListEvent) {
         when(event) {
             is TodoListEvent.OnTodoClick -> {
-                //todo id gonderirik ki add_edit_screen'de bos textfield'ler gormeyek
                 sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
             }
             is TodoListEvent.OnAddTodoClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO))
             }
             is TodoListEvent.OnUndoDeleteClick -> {
-                // null deyilse sildiyimizi undo edirik
                 deletedTodo?.let { todo ->
                     viewModelScope.launch {
-                        repository.insertTodo(todo)    //yeniden database'e qayidir todo
+                        repository.insertTodo(todo)    
                     }
                 }
             }
@@ -58,7 +52,6 @@ class TodoListViewModel @Inject constructor(
             is TodoListEvent.OnDoneChange -> {
                 viewModelScope.launch {
                     repository.insertTodo(
-                        // id'sini saxlayib movcud olani update edir
                         event.todo.copy(
                             isDone = event.isDone
                         )
@@ -68,9 +61,7 @@ class TodoListViewModel @Inject constructor(
         }
     }
 
-
     private fun sendUiEvent(event: UiEvent) {
-        // her 2 ekranda ola bilecek one time eventleri yaziriq, send() teleb edirdi bunu
         viewModelScope.launch {
             _uiEvent.send(event)
         }
