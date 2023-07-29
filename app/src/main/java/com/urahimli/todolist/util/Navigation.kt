@@ -29,8 +29,7 @@ fun Navigation() {
             arguments = listOf(
                 navArgument(name = "todoId") {
                     type = NavType.IntType
-                    defaultValue =
-                        -1             //hansi ki add_edit_viewmodel'da da -1 olma logicini yazmisdiq
+                    defaultValue = -1             
                 }
             )
         ) {
